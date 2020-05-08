@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 파헤치기 - Rxjava란? - (1)"
+title:  "[RxJava] RxJava 정리 - Rxjava란? - (1)"
 subtitle:   "Rxjava "
 categories: devlog
 tags: rxjava
@@ -81,3 +81,117 @@ fun main() {
 
 RxJava의 또 다른 특징으로 쉬운 비동기 처리를 만들 수 있습니다. Reactive Streams 규칙의 근간이 되는 Observable 규약이라는 Rxjava 개발 가이드라인을 따른 구현이라면 직접
 스레드(Thread)를 관리하는 번거로움에서 해방될 뿐만 아니라 구현도 간단하게 할 수 있습니다. 또한 동기 처리나 비동기 처리나 구현 방법에 큰 차이가 없는 것도 RxJava의 큰 특징 입니다.
+
+RxJava는 ReactiveX(Reactive Extensions)의 JVM 구현입니다.
+
+Rx에는 크게 3가지의 역할이 있습니다.
+ - 생산자
+     데이터를 생산하여 전달
+ - 소비자
+     데이터를 받아서 처리
+ - 연산자
+     데이터를 중간에서 가공(생산, 변환, 조합, 거름) 처리
+
+
+Rxjava는 소비자(Subscriber/Observer)가 생산자(Observable/Flowable/Completable/Maybe/Single)를 구독하는 형태로 만들어져 있습니다.
+간단히 말하면, **생산자는 데이터를 생산하고 통지하는 클래스이며, 소비자는 통지된 데이터를 전달받아 이 데이터를 처리합니다.**
+
+생산자는 다음 포스트에 정리하도록 하겠습니다.
+
+**3가지 역할의 예시**
+```kotlin
+    Observable // 생산자
+        .just(0, 1, 2, 3) // 생산 연산자
+        .map { it * 2 } // 변경 연산자
+        .subscribe { // 소비자
+            println(it)
+        }
+```
+
+그리고 각 역할들은 각각 다른 Scheduler에서 처리를 할 수 있습니다.
+
+
+
+## Disposable이란?
+
+**Disposable은 구독을 해지하는 메서드를 포함하는 인터페이스**
+ subscribe()함수를 실행하면 Disposable 객체가 반환 됩니다.
+ Disposable을 통해 데이터를 생산해서 소비까지 시간이 오래 걸리는 경우에 현재 작업을 취소할 수 있습니다.
+ Disposable#dispose() 함수를 통해 현재 작업을 취소할 수 있습니다.
+ 구독 해지 뿐만 아니라 자원을 해제하는 등의 처리에도 활용 가능합니다. 만약, 처리가 끝날 때에 자원을 해제해야 한다면 dispose()메소드에 구현하면 됩니다.
+
+ **예시**
+  - 새로운 작업을 진행 할 때 이전 작업을 취소
+  - 화면을 떠날 때 진행 하던 작업을 취소
+
+## CompositeDisposable이란?
+
+**CompositeDisposable은 Disposable을 저장하는 Container**
+
+ CompositeDisposable은 여러 Disposable을 모아 CompositeDisposable의 dispose()메소드를 호출함으로써 가지고 있는 모든 Disposable의 dispose 메서드를 호출할 수 있는 클래스 입니다.
+
+add(), addAll() 함수로 Disposable 객체를 추가 할 수 있으며, clear(), dispose() 함수로 dispose()를 처리 할 수 있습니다.
+
+**clear()와 dispose()의 차이는 무엇일까?**
+
+ - clear()를 호출하면 호출한 CompositeDisposable 객체는 재사용 가능합니다.
+ - dispose()를 호출하면 호출한 CompositeDisposable 객체는 재사용이 불가능합니다. ( add()하는 시점에 dispose() 시켜버립니다.)
+
+ ```kotlin
+
+    val compositeDisposable = CompositeDisposable()
+    val disposable1 = Observable.just(1, 2)
+        .subscribe { println(it) }
+    compositeDisposable.add(disposable1)
+    compositeDisposable.clear() // dispose()
+    val disposable2 = Observable.just(3, 4)
+        .delay(1, TimeUnit.SECONDS)
+        .subscribe { println(it) }
+    compositeDisposable.add(disposable2)
+    Thread.sleep(2000L)
+
+    val compositeDisposable2 = CompositeDisposable()
+    val disposable3 = Observable.just(1, 2)
+        .subscribe { println(it) }
+    compositeDisposable2.add(disposable3)
+    compositeDisposable2.dispose() // dispose()
+    val disposable4 = Observable.just(3, 4)
+        .delay(1, TimeUnit.SECONDS)
+        .subscribe { println(it) }
+    compositeDisposable2.add(disposable4)
+    Thread.sleep(2000L)
+
+ ```
+
+ **실행결과**
+ ![image](https://user-images.githubusercontent.com/43161981/81379108-7c272d00-9143-11ea-9b3d-4094757f0f5d.png)
+
+위에 실행결과를 보면 알 수 있듯이 첫번째 compositable 객체는 clear()함수를 호출해서 재사용 가능 하므로
+1,2,3,4가 모두 찍히는 것을 알 수 있고
+
+두번째 CompositeDisposable 객체는 dispose()함수의 호출로 인해 재사용이 불가능 하므로
+1,2만 찍히는 것을 알 수 있습니다.
+
+
+## 마블 다이어그램
+
+<img width="605" alt="legend" src="https://user-images.githubusercontent.com/43161981/81379666-7d0c8e80-9144-11ea-9736-48e2aabd276a.png">
+
+출처 : http://reactivex.io/RxJava/javadoc/io/reactivex/Observable.html
+
+마블 다이어그램은 데이터의 흐름을 도식화한 것 입니다.
+
+알록달록한 색깔로 되어 있는 도형들은 데이터이고 첫번 째 줄에서 시간 순으로 데이터가 발행 되는 것을 뜻 합니다.
+데이터를 발행할 때에는 onNext()함수를 통해 발행 됩니다.
+
+점선 화살표는 각각 입력, 출력을 뜻하고, 연산자를 통해 변환 되는 것을 알 수 있고, 실제로는 존재하지 않는 연산자지만
+flip()함수를 통해 출력된 도형의 모양이 뒤집혀 진 것을 확인 할 수 있습니다.
+
+ 파이프(ㅣ) -> 정상적으로 데이터 발행을 완료했다는 것을 의미합니다. 이 때 onComplete() 함수가 실행 됩니다.
+ X표시 -> 에러가 발생하였음을 의미합니다. 이 때 onError() 함수가 실행 됩니다.
+
+따라서 이 마블 다이어그램은 데이터가 3개까지만 발행되고 에러가 발생되었 다는 것을 알 수 있습니다.
+
+
+
+다음 포스트에는 생산자에 대해 정리하겠습니다.
