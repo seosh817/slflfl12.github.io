@@ -4,5 +4,5 @@ title: Android
 slug: android
 category: devlog
 menu: false
-order: 4
+order: 1
 ---

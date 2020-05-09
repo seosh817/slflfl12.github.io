@@ -1,8 +1,8 @@
 ---
 layout: tag-blog
-title: Rxjava
+title: RxJava
 slug: rxjava
 category: devlog
 menu: false
-order: 2
+order: 1
 ---
