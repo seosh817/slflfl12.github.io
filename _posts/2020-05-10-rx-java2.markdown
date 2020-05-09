@@ -11,14 +11,12 @@ comments: true
 라고 하였습니다.
 
 이번 포스트에서 다룰 생산자는 **데이터를 생성해서 전달만 하는 역할**만 하는 것이고
-
 생산자를 다루기 전에 **데이터를 소비하는 역할**만 하는 방식에 대해 알아 보겠습니다.
+
 
 데이터를 소비하는 방법은 **Consumer방식**과 **Observer방식** 두가지 방식이 있습니다.
 
-
 먼저 Observer 방식부터 설명 하겠습니다.
-
 Observer 객체는 아래와 같은 인터페이스 형태로 되어 있고
 
 ```java
@@ -53,6 +51,7 @@ class CustomObserver<T>(
 //        ErrorUtil.handleError(e)
     }
 }
+```
 
 ```kotlin
 
@@ -66,6 +65,9 @@ class CustomObserver<T>(
 **실행 결과**
 ![image](https://user-images.githubusercontent.com/43161981/81480332-0ff01a80-9264-11ea-8703-10fdf46021e5.png)
 
+
+
+**▼ Observer 방식일 때의 subscribe() 함수**
 ```java
     @SchedulerSupport(SchedulerSupport.NONE)
     @Override
@@ -91,7 +93,7 @@ class CustomObserver<T>(
         }
     }
 ```
-Observer 방식일 때의 subscribe() 함수
+
 
 하지만 위와 같은 Observer방식은 거의 사용되지 않는다고 들었고
 아래와 같은 **Consumer 방식**이 가장 많이 쓰인다고 합니다. (이유는 편해서..??)
@@ -110,7 +112,7 @@ Observer 방식일 때의 subscribe() 함수
 ![image](https://user-images.githubusercontent.com/43161981/81480332-0ff01a80-9264-11ea-8703-10fdf46021e5.png)
 
 위와 동일한 코드이므로 당연히 실행결과는 같고 위와는 subscribe()함수가 다른 것을 알 수 있습니다.
-
+**▼ Consumer 방식일 때의 subscribe() 함수**
 ```java
     @CheckReturnValue
     @SchedulerSupport(SchedulerSupport.NONE)
@@ -120,6 +122,8 @@ Observer 방식일 때의 subscribe() 함수
 ```
 
 위의 메소드를 보면 알 수 있듯이 subscribe()를 하는 시점에 Disposable객체를 반환합니다.
+
+
 
 
 
