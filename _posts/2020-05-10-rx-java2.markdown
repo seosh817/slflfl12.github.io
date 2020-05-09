@@ -1,0 +1,139 @@
+---
+layout: post
+title:  "[RxJava] RxJava 정리 (2) - Rxjava 생산자 -"
+subtitle:   "Rxjava"
+categories: devlog
+tags: rxjava
+comments: true
+---
+
+저번 포스트를 다시 정리해 보면 옵저버 패턴을 잘 이용하면 **데이터를 생성하는 측**과 **데이터를 소비하는 측**으로 나눌 수 있기 때문에 **쉽게 데이터 스트림을 처리할 수 있다.**
+라고 하였습니다.
+
+이번 포스트에서 다룰 생산자는 **데이터를 생성해서 전달만 하는 역할**만 하는 것이고
+
+생산자를 다루기 전에 **데이터를 소비하는 역할**만 하는 방식에 대해 알아 보겠습니다.
+
+데이터를 소비하는 방법은 **Consumer방식**과 **Observer방식** 두가지 방식이 있습니다.
+
+
+먼저 Observer 방식부터 설명 하겠습니다.
+
+Observer 객체는 아래와 같은 인터페이스 형태로 되어 있고
+
+```java
+public interface Observer<T> {
+    void onSubscribe(@NonNull Disposable d);
+    void onNext(@NonNull T t);
+    void onError(@NonNull Throwable e);
+    void onComplete();
+}
+```
+
+해당 인터페이스를 상속 받아서 아래와 같이 커스텀 옵저버를 구현해 줄 수 있습니다.
+
+```kotlin
+class CustomObserver<T>(
+    private val compositeDisposable: CompositeDisposable,
+    private val onNextAction: (T) -> Unit
+) : Observer<T> {
+    override fun onComplete() {
+        // no-op
+    }
+
+    override fun onSubscribe(d: Disposable) {
+        compositeDisposable.add(d)
+    }
+
+    override fun onNext(t: T) {
+        onNextAction(t)
+    }
+
+    override fun onError(e: Throwable) {
+//        ErrorUtil.handleError(e)
+    }
+}
+
+```kotlin
+
+    val compositeDisposable = CompositeDisposable()
+    val customObserver = CustomObserver<Int>(compositeDisposable) { println(it)}
+
+    Observable.just(1, 2, 3)
+        .subscribe(customObserver)
+
+```
+**실행 결과**
+![image](https://user-images.githubusercontent.com/43161981/81480332-0ff01a80-9264-11ea-8703-10fdf46021e5.png)
+
+```java
+    @SchedulerSupport(SchedulerSupport.NONE)
+    @Override
+    public final void subscribe(Observer<? super T> observer) {
+        ObjectHelper.requireNonNull(observer, "observer is null");
+        try {
+            observer = RxJavaPlugins.onSubscribe(this, observer);
+
+            ObjectHelper.requireNonNull(observer, "The RxJavaPlugins.onSubscribe hook returned a null Observer. Please change the handler provided to RxJavaPlugins.setOnObservableSubscribe for invalid null returns. Further reading: https://github.com/ReactiveX/RxJava/wiki/Plugins");
+
+            subscribeActual(observer);
+        } catch (NullPointerException e) { // NOPMD
+            throw e;
+        } catch (Throwable e) {
+            Exceptions.throwIfFatal(e);
+            // can't call onError because no way to know if a Disposable has been set or not
+            // can't call onSubscribe because the call might have set a Subscription already
+            RxJavaPlugins.onError(e);
+
+            NullPointerException npe = new NullPointerException("Actually not, but can't throw other exceptions due to RS");
+            npe.initCause(e);
+            throw npe;
+        }
+    }
+```
+Observer 방식일 때의 subscribe() 함수
+
+하지만 위와 같은 Observer방식은 거의 사용되지 않는다고 들었고
+아래와 같은 **Consumer 방식**이 가장 많이 쓰인다고 합니다. (이유는 편해서..??)
+
+
+```kotlin
+    Observable.just(1, 2, 3)
+        .subscribe({
+            println(it)
+        }, {
+            println(it)
+        })
+```
+
+**실행결과**
+![image](https://user-images.githubusercontent.com/43161981/81480332-0ff01a80-9264-11ea-8703-10fdf46021e5.png)
+
+위와 동일한 코드이므로 당연히 실행결과는 같고 위와는 subscribe()함수가 다른 것을 알 수 있습니다.
+
+```java
+    @CheckReturnValue
+    @SchedulerSupport(SchedulerSupport.NONE)
+    public final Disposable subscribe(Consumer<? super T> onNext, Consumer<? super Throwable> onError) {
+        return subscribe(onNext, onError, Functions.EMPTY_ACTION, Functions.emptyConsumer());
+    }
+```
+
+위의 메소드를 보면 알 수 있듯이 subscribe()를 하는 시점에 Disposable객체를 반환합니다.
+
+
+
+
+
+
+## RxJava의 생산자
+
+Rxjava의 생산자들에 대해 알아보겠습니다.
+
+**Observable**
+**Single**
+**Maybe**
+**Completable**
+**Subejct** -> Observable과 Observer의 성격을 둘 다 가지고 있는 클래스 입니다.
+
+
