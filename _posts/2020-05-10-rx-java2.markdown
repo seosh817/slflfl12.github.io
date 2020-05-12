@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 정리 - (1) - 생산자와 소비자 -"
+title:  "[RxJava] RxJava 정리 - (2) - 생산자와 소비자 -"
 subtitle:   "Rxjava"
 categories: devlog
 tags: rxjava
@@ -11,7 +11,7 @@ comments: true
 라고 하였습니다.
 
 이번 포스트에서 다룰 생산자는 **데이터를 생성해서 전달만 하는 역할**만 하는 것이고
-생산자를 다루기 전에 **데이터를 소비하는 역할**만 하는 방식에 대해 알아 보겠습니다.
+생산자를 다루기 전에 **데이터를 소비하는 역할**만 하는 **소비자**에 대해 알아 보겠습니다.
 
 
 데이터를 소비하는 방법은 **Consumer방식**과 **Observer방식** 두가지 방식이 있습니다.
@@ -143,14 +143,137 @@ class CustomObserver<T>(
 
 Rxjava의 생산자들에 대해 알아보겠습니다.
 
-**Observable**
 
-**Single**
 
-**Maybe**
+### Observable
 
-**Completable**
+0..n개의 데이터를 전달하는 생산자 입니다.
 
-**Subejct** -> Observable과 Observer의 성격을 둘 다 가지고 있는 클래스 입니다.
+Observer를 subscribe하거나
+
+Consumer를 subscribe하는 방식으로 소비자를 추가할 수 있습니다.
+
+```java
+public interface Observer<T> {
+    void onSubscribe(@NonNull Disposable d);
+    void onNext(@NonNull T t);
+    void onError(@NonNull Throwable e);
+    void onComplete();
+}
+```
+
+**onSubscirbe()**
+
+데이터를 준비할 완료가 되면 이 함수를 호출합니다.
+
+이 함수에서 Disposable을 매개변수로 받습니다.
+
+**onNext()**
+
+데이터를 전달할 때 이 함수를 호출합니다.
+
+이 함수에서 데이터를 받아서 처리합니다.
+
+**onComplete()**
+
+이 함수가 호출되면 Observable이 완료된 것을 의미합니다.
+
+**onError()**
+
+에러를 전달할 때 이 함수를 호출합니다.
+
+이 함수에서 에러를 받아서 처리합니다.
+
+
+### Single
+
+1개의 데이터를 전달하는 생산자 입니다.
+
+SingleObserver를 subscribe하거나
+
+Consumer를 subscribe하는 방식으로 소비자를 추가할 수 있습니다.
+
+
+```java
+public interface SingleObserver<T> {
+    void onSubscribe(@NonNull Disposable d);
+    void onSuccess(@NonNull T t);
+    void onError(@NonNull Throwable e);
+}
+```
+
+
+**onSuccess()**
+
+데이터를 전달할 때 이 함수를 호출합니다.
+
+이 함수에서 데이터를 받아서 처리합니다.
+
+
+
+
+
+### Maybe
+
+0..1개의 데이터를 전달하는 생산자 입니다.
+
+MaybeObserver를 subscribe 하거나
+
+Consumer를 subscribe하는 방식으로 소비자를 추가할 수 있습니다.
+
+```java
+public interface MaybeObserver<T> {
+    void onSubscribe(@NonNull Disposable d);
+    void onSuccess(@NonNull T t);
+    void onError(@NonNull Throwable e);
+    void onComplete()
+}
+```
+
+**onSuccess()**
+
+데이터를 전달할 때 이 함수를 호출 합니다.
+
+여기서 데이터를 처리합니다.
+
+**onComplete()**
+
+이 함수가 호출되면 Maybe가 완료된 것을 의미합니다.
+
+
+### Completable
+
+0개의 데이터를 전달하는 생산자 입니다.
+
+CompletableObserver를 subscribe하거나
+
+Consumer를 subscribe하는 방식으로 소비자를 추가할 수 있습니다.
+
+
+```java
+public interface CompletableObserver {
+    void onSubscribe(@NonNull Disposable d);
+    void onComplete();
+    void onError(@NonNull Throwable e);
+}
+```
+
+**onComplete()**
+
+이 함수가 호출되면 Completable()이 완료된 것을 의미합니다.
+
+
+
+### Subejct
+
+Observable과 Observer의 성격을 둘 다 가지고 있는 클래스 입니다.
+
+Observable이 가지고 있는 subscribe와 여러 operator를 사용할 수 있습니다.
+
+Observer가 가지고 있는 onNext, onError, onComplete를 사용할 수 있습니다.
+
+subscribe를 했을 때 데이터를 넘겨주는 방식에 따라 Publish, Behavior, Replay, Async로 나누어져 있습니다.
+
+
 
 
