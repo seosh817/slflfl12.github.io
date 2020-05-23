@@ -264,7 +264,7 @@ public interface CompletableObserver {
 
 
 
-### Subejct
+## Subejct
 
 Observable과 Observer의 성격을 둘 다 가지고 있는 클래스 입니다.
 
@@ -275,5 +275,22 @@ Observer가 가지고 있는 onNext, onError, onComplete를 사용할 수 있습
 subscribe를 했을 때 데이터를 넘겨주는 방식에 따라 Publish, Behavior, Replay, Async로 나누어져 있습니다.
 
 
+### PublishSubject
 
+→구독한 시점부터 데이터를 새로 받아오는 Subject
 
+subscribe 하면 Observer 여러개
+
+### BehaviorSubject
+
+-> 구독하면 subscribe()한 시점에서의 마지막데이터까지 받아온다.
+
+★생산하는 곳이 여러곳이 있을 경우 이걸 사용(ex. RxBus)
+
+### ReplaySubject
+
+subscribe()하면 지금까지 발행된 데이터를 전부 받아옴
+
+### AsyncSubject
+
+Complete()가 되면 가장 마지막 데이터를 받게 됨
