@@ -9,7 +9,7 @@ order: 10
 
 안녕하세요, 저는 서승환 입니다. 재밌는 것과 개발을 좋아하는 개발자입니다.
 
-현재는 android, java, kotlin, android architecture, reactive programming에 관심이 많아서 열심히 공부하고 있습니다.
+android, java, kotlin, android architecture, reactive programming에 관심이 많습니다.
 
 사람들을 만나는 걸 좋아하고, 그들과 함께 웃는 것을 좋아합니다. 혼자 어디 박혀서 코딩한다거나 뒹굴거리는 시간도 좋아합니다. 좋아하는게 많은 타입인 것 같아요.
 
