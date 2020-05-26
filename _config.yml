@@ -18,8 +18,7 @@ tagline:             일상, 개발 등을 포스트하는 블로그 입니다.
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
 description:         >
-    자유로운 것을 좋아하므로 내 시간을 가지기 위해 누구보다 열심히 배워서 쉽게 일하자는 마인드를 가지고 있습니다.
-    현재는 android, java, kotlin, android-architecture, reactive programming에 관심이 많아서 공부하고 있습니다.
+   언제나 열심히
 
 # This should be the same author as first entry in `_data/authors.yml`
 author:
