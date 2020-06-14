@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 정리 - (1) - Rxjava란? -"
+title:  "[RxJava] RxJava 정리 - (1) - Rxjava란?"
 subtitle:   "Rxjava"
 categories: devlog
 tags: rxjava

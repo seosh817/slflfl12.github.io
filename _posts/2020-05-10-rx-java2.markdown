@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 정리 - (2) - 생산자와 소비자 -"
+title:  "[RxJava] RxJava 정리 - (2) - 생산자와 소비자"
 subtitle:   "Rxjava"
 categories: devlog
 tags: rxjava
