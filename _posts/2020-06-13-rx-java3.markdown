@@ -1,0 +1,203 @@
+---
+layout: post
+title:  "[RxJava] RxJava 정리 - (3) - 생성 연산자 -"
+subtitle:   "Rxjava"
+categories: devlog
+tags: rxjava
+comments: true
+---
+
+생성 연산자는 Observable을 생성하는 연산자들입니다.
+
+## just
+
+
+![image](https://user-images.githubusercontent.com/43161981/84595811-ed6da480-ae94-11ea-93bf-2ceb7fc7fb02.png)
+
+just 연산자는 인자로 받은 데이터들을 순서대로 통지하는 Observable을 생성하는 연산자 입니다.
+
+데이터는 10개까지 배출할 수 있습니다.
+
+```kotlin
+    Observable
+        .just(0,1,2,3)
+        .map { it * 2}
+        .subscribe {
+            println(it)
+        }
+```
+
+# 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84595866-4c331e00-ae95-11ea-85ec-e1c943a63478.png)
+
+
+## craete 
+
+![image](https://user-images.githubusercontent.com/43161981/84591399-f781aa00-ae78-11ea-8443-09b8bcc46337.png)
+
+emitter를 지정해서 함수 내부에서 onNext(), onError(), onComplete() 호출해서 데이터를 전달할 수 있습니다.
+
+만약 onNext()를 여러개 작성해 놓는다면 그 갯수만큼 옵저버에게 데이터를 전달할 수 있습니다.
+
+```kotlin
+
+    Observable.create<String> { emitter ->
+        // Hello 전달
+        emitter.onNext("Hello")
+        // World 전달
+        emitter.onNext("World")
+        // 완료
+        emitter.onComplete()
+    }.subscribe { println(it) }
+
+```
+
+### 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84591536-28161380-ae7a-11ea-8bd7-85499b0ad53d.png)
+
+
+## defer 
+
+![image](https://user-images.githubusercontent.com/43161981/84594411-feb2b300-ae8c-11ea-8160-736c656112fd.png)
+
+defer로 생성한 Observable은 옵저버가 구독하기 전까지는 Observable을 생성하지 않습니다.
+
+만약 새로운 옵저버가 구독을 한다면 해당 옵저버는 여태 발행했던 데이터들을 모두 얻을 수 있습니다.
+
+defer는 구독할 때마다 항상 새로운 Observable을 받아와야 할 때 사용합니다. 예를 들면, 오전에 관한 Observable, 오후에 관한 Observable 따로 처리 하듯, 다른 케이스의 Observable을 사용해야 할 때 defer를 사용합니다.
+
+
+```kotlin
+    val observable = Observable.defer {
+        Observable.just(LocalTime.now())
+    }
+
+    observable.subscribe { println(it) }
+
+    Thread.sleep(2000L)
+    observable.subscribe{println(it)}
+```
+
+# 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84595371-7b945b80-ae92-11ea-872c-dfa22d300c8d.png)
+
+실행결과를 보면 알 수 있듯이 defer를 사용하면 최신의 Observable을 받아오므로 데이터를 받은 현재 시간이 다르게 되므로 2초 후에 구독한 observer에서 2초의 시간 차이가 나는 것을 알 수 있습니다.
+
+
+
+```kotlin
+
+    val observable = Observable.just(LocalTime.now())
+
+    observable.subscribe { println(it) }
+
+    Thread.sleep(2000L)
+    observable.subscribe{println(it)}
+```
+
+# 실행결과
+![image](https://user-images.githubusercontent.com/43161981/84595459-f78ea380-ae92-11ea-9f3b-35d0843a557d.png)
+
+
+반면 just를 사용한다면 just를 한 시점에서 바로 전달하므로 시간차이가 없는 것을 알 수 있습니다.
+
+![image](https://user-images.githubusercontent.com/43161981/84595649-02960380-ae94-11ea-9a2a-cc607d847553.png)
+
+## fromArray
+
+![image](https://user-images.githubusercontent.com/43161981/84595649-02960380-ae94-11ea-9a2a-cc607d847553.png)
+
+
+array를 받아서 Observable을 만듭니다.
+
+*넣으면 spread 형태로 넘어감 (kotlin operator spread)
+
+```kotlin
+
+    val items = arrayOf("Hello", "World")
+    Observable.fromArray(*items)
+        .subscribe { println(it) }
+```
+
+# 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84595931-adf38800-ae95-11ea-945e-d5ea7381228c.png)
+
+
+## fromCallable
+
+![image](https://user-images.githubusercontent.com/43161981/84595948-cb285680-ae95-11ea-8685-ad377c910b47.png)
+
+데이터를 전달해야 할 시점에 데이터를 만들어서 전달하는 생성자 입니다.
+
+subscribe를 할 때 fromCallable 쪽 명령어가 실행됩니다.
+
+```kotlin
+    println("start: ${System.currentTimeMillis()}")
+    fun createItem(): String {
+        println("create: ${System.currentTimeMillis()}")
+        return "HelloWorld"
+    }
+
+    val observable = Observable.fromCallable { createItem() }
+
+    Thread.sleep(1000)
+    observable.subscribe { println(it) }
+
+    Thread.sleep(1000)
+    observable.subscribe { println(it) }
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84596066-70432f00-ae96-11ea-83b3-913df088d399.png)
+
+
+fromCallable → subscribe를 할 때 fromCallable 쪽 명령어가 실행됨
+
+                      → fun a(): List<Int> {} 함수를 fromCallable 안에 넣는다면 subscribe()안에서 해당 List<Int>가 return 됨
+
+fromIterable → 다른 것들과는 다르게 Iterable(array같은) 형태의 것을 받음 → fromarray보다 많이씀(*안쓰니까)
+
+interval → interval만큼 쉬고 나서 데이터를 전달
+
+just → 10개까지밖에 배출 안됨 10개 이상은 fromArray, fromIterable 사용해야함
+
+range → range(n, m) n부터 m개의 숫자를 배출 range(3,2) 는 3부터 3, 4
+
+repeat → Observable을 원하는 개수만큼 반복시켜서 데이터를 전달하는 operator
+
+timer → 일정 시간 뒤에 무언가를 실행하는 녀석임. (ex. splash 화면에서 post delay 쓰는것)
+
+[//](//just는)이 연산자들은 Single Maybe Observable에 따라 (데이터를 전달하는 갯수에 따라 있는 것도 있고 없는 것도 있음)
+
+TransformationOperator
+
+buffer → 데이터를 바로 전달하지 않고 묶어놓고 쓸 때 씀( onBackpressed 쓸 때 count 모아서 배출)
+
+               (ex. skip은 어느정도 데이터를 묶고 보낼지) 
+
+             → count 2주고 count 1 주면 이전 데이터가 남아서 빠르게 두번 눌렀을 때 종료 시킬 수 있음
+
+flatMap → 데이터가 들어오면 새로운 녀석으로 만들어줌( 다른 Observable로 만들어야 될 때)
+
+              → flatMap 같은 경우에는 api에서 Response(데이터)를 받아서 다른 api를 처리 할 때
+
+              → 새로운 걸로 대체해 버리는 것
+
+=새로운 Observable이 들어와도 기존 Observable이 끝날 때 까지 기다림
+
+                       ex. 다운로드 받기 병렬 → flatMap 
+
+                           다운로드 받기 기다리게 할경우 → concatMap
+
+                            다운로드 기존것 취소하게 하는 것 → switchMap
+
+list의 flatMap과는 다름
+
+map → 데이터 스트림을 다른 형태로 바꿀 때
+
+scan → 이전 데이터와 현재 데이터를 조합해서 전달하는 operator
