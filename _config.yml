@@ -18,7 +18,7 @@ tagline:             일상, 개발 등을 포스트하는 블로그 입니다.
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
 description:         
-   언제나 열심히
+
 
 # This should be the same author as first entry in `_data/authors.yml`
 author:
