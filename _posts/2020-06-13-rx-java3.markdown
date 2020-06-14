@@ -9,7 +9,7 @@ comments: true
 
 생성 연산자는 Observable을 생성하는 연산자들입니다.
 
-## just
+# just
 
 
 ![image](https://user-images.githubusercontent.com/43161981/84595811-ed6da480-ae94-11ea-93bf-2ceb7fc7fb02.png)
@@ -27,12 +27,15 @@ just 연산자는 인자로 받은 데이터들을 순서대로 통지하는 Obs
         }
 ```
 
-# 실행결과
+## 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84595866-4c331e00-ae95-11ea-85ec-e1c943a63478.png)
 
 
-## craete 
+
+
+
+# craete 
 
 ![image](https://user-images.githubusercontent.com/43161981/84591399-f781aa00-ae78-11ea-8443-09b8bcc46337.png)
 
@@ -53,20 +56,21 @@ emitter를 지정해서 함수 내부에서 onNext(), onError(), onComplete() �
 
 ```
 
-### 실행결과
+## 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84591536-28161380-ae7a-11ea-8bd7-85499b0ad53d.png)
 
 
-## defer 
+
+
+# defer 
 
 ![image](https://user-images.githubusercontent.com/43161981/84594411-feb2b300-ae8c-11ea-8160-736c656112fd.png)
 
-defer로 생성한 Observable은 옵저버가 구독하기 전까지는 Observable을 생성하지 않습니다.
+defer로 생성한 Observable은 옵저버가 구독하기 전까지는 Observable을 생성하지 않습니다. 만약 새로운 옵저버가 구독을 한다면 해당 옵저버는 여태 발행했던 데이터들을 모두 얻을 수 있습니다.
 
-만약 새로운 옵저버가 구독을 한다면 해당 옵저버는 여태 발행했던 데이터들을 모두 얻을 수 있습니다.
-
-defer는 구독할 때마다 항상 새로운 Observable을 받아와야 할 때 사용합니다. 예를 들면, 오전에 관한 Observable, 오후에 관한 Observable 따로 처리 하듯, 다른 케이스의 Observable을 사용해야 할 때 defer를 사용합니다.
+구독하는 시점에 defer() 안의 Observable을 생성하기 때문에 defer는 구독할 때마다 항상 새로운 Observable을 받아와야 할 때 사용합니다.
+예를 들면, 오전에 관한 Observable, 오후에 관한 Observable 따로 처리 하듯, 다른 케이스의 Observable을 사용해야 할 때 defer를 사용합니다.
 
 
 ```kotlin
@@ -80,7 +84,7 @@ defer는 구독할 때마다 항상 새로운 Observable을 받아와야 할 때
     observable.subscribe{println(it)}
 ```
 
-# 실행결과
+## 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84595371-7b945b80-ae92-11ea-872c-dfa22d300c8d.png)
 
@@ -98,7 +102,7 @@ defer는 구독할 때마다 항상 새로운 Observable을 받아와야 할 때
     observable.subscribe{println(it)}
 ```
 
-# 실행결과
+## 실행결과
 ![image](https://user-images.githubusercontent.com/43161981/84595459-f78ea380-ae92-11ea-9f3b-35d0843a557d.png)
 
 
@@ -106,7 +110,11 @@ defer는 구독할 때마다 항상 새로운 Observable을 받아와야 할 때
 
 ![image](https://user-images.githubusercontent.com/43161981/84595649-02960380-ae94-11ea-9a2a-cc607d847553.png)
 
-## fromArray
+
+
+
+
+# fromArray
 
 ![image](https://user-images.githubusercontent.com/43161981/84595649-02960380-ae94-11ea-9a2a-cc607d847553.png)
 
@@ -122,12 +130,16 @@ array를 받아서 Observable을 만듭니다.
         .subscribe { println(it) }
 ```
 
-# 실행결과
+## 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84595931-adf38800-ae95-11ea-945e-d5ea7381228c.png)
 
 
-## fromCallable
+
+
+
+
+# fromCallable
 
 ![image](https://user-images.githubusercontent.com/43161981/84595948-cb285680-ae95-11ea-8685-ad377c910b47.png)
 
@@ -155,49 +167,133 @@ subscribe를 할 때 fromCallable 쪽 명령어가 실행됩니다.
 
 ![image](https://user-images.githubusercontent.com/43161981/84596066-70432f00-ae96-11ea-83b3-913df088d399.png)
 
+실행결과를 보면 알 수 있듯이 subscribe()하는 시점에 createItem()의 함수를 통해 데이터를 만들어서 데이터를 전달합니다.
 
-fromCallable → subscribe를 할 때 fromCallable 쪽 명령어가 실행됨
 
-                      → fun a(): List<Int> {} 함수를 fromCallable 안에 넣는다면 subscribe()안에서 해당 List<Int>가 return 됨
 
-fromIterable → 다른 것들과는 다르게 Iterable(array같은) 형태의 것을 받음 → fromarray보다 많이씀(*안쓰니까)
 
-interval → interval만큼 쉬고 나서 데이터를 전달
 
-just → 10개까지밖에 배출 안됨 10개 이상은 fromArray, fromIterable 사용해야함
+# fromIterable
 
-range → range(n, m) n부터 m개의 숫자를 배출 range(3,2) 는 3부터 3, 4
+![image](https://user-images.githubusercontent.com/43161981/84596607-b483fe80-ae99-11ea-9eac-2f0c5183de70.png)
 
-repeat → Observable을 원하는 개수만큼 반복시켜서 데이터를 전달하는 operator
 
-timer → 일정 시간 뒤에 무언가를 실행하는 녀석임. (ex. splash 화면에서 post delay 쓰는것)
+fromArray와는 다르게 iterable을 implements 한 클래스를 파라미터로 받아서 Observable을 만드는 연산자입니다.
 
-[//](//just는)이 연산자들은 Single Maybe Observable에 따라 (데이터를 전달하는 갯수에 따라 있는 것도 있고 없는 것도 있음)
 
-TransformationOperator
+```kotlin
 
-buffer → 데이터를 바로 전달하지 않고 묶어놓고 쓸 때 씀( onBackpressed 쓸 때 count 모아서 배출)
+    val list2 = listOf(4, 5, 6)
 
-               (ex. skip은 어느정도 데이터를 묶고 보낼지) 
+    Observable.fromIterable(
+        list2
+    ).subscribe {
+        println(it)
+    }
 
-             → count 2주고 count 1 주면 이전 데이터가 남아서 빠르게 두번 눌렀을 때 종료 시킬 수 있음
+```
 
-flatMap → 데이터가 들어오면 새로운 녀석으로 만들어줌( 다른 Observable로 만들어야 될 때)
+## 실행결과
 
-              → flatMap 같은 경우에는 api에서 Response(데이터)를 받아서 다른 api를 처리 할 때
+![image](https://user-images.githubusercontent.com/43161981/84596699-370cbe00-ae9a-11ea-9450-9391352b735d.png)
 
-              → 새로운 걸로 대체해 버리는 것
 
-=새로운 Observable이 들어와도 기존 Observable이 끝날 때 까지 기다림
+# interval
 
-                       ex. 다운로드 받기 병렬 → flatMap 
+interval(long initialDelay, long period, TimeUnit unit)
 
-                           다운로드 받기 기다리게 할경우 → concatMap
+initialDelay를 시작으로 period 주기로 Long 값을 0부터 n까지 증가시키면서 데이터를 전달하는 Observable을 만드는 연산자입니다.
 
-                            다운로드 기존것 취소하게 하는 것 → switchMap
+특정 주기마다 반복해야 할 때 사용합니다.
 
-list의 flatMap과는 다름
+interval은 별도의 설정이 없으면 Schedulers.computation()의 스케쥴러에서 실행됩니다. 별도의 스레드에서 처리를 하기 때문에, 해당 스레드의 작업이 끝날때 까지 프로그램이 끝나면 안되기 때문에 Thread.Sleep()를 통해 기다려 줍니다.
 
-map → 데이터 스트림을 다른 형태로 바꿀 때
+interval 메소드로 생성한 Observable은 완료할 수가 없으므로 완료 통지가 필요하다면 take() 메서드 등으로 통지할 데이터를 제한하는 작업이 필요합니다.
 
-scan → 이전 데이터와 현재 데이터를 조합해서 전달하는 operator
+```kotlin
+
+    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss.SSS")
+
+    Observable.interval(0, 1000L, TimeUnit.MILLISECONDS)
+        .take(2)
+        .subscribe {data ->
+            println(LocalTime.now().format(dateTimeFormatter) + "data = $data") }
+    Thread.sleep(3000L)
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84598664-6118ad00-aea7-11ea-9418-4b8c0df165e5.png)
+
+
+# timer
+
+![image](https://user-images.githubusercontent.com/43161981/84598692-860d2000-aea7-11ea-9eef-1312cb06c815.png)
+
+정해진 delay 이후에 특정 값을 전달 하는 Observable을 생성하는 연산자입니다.
+
+스케쥴러 설정을 해주지 않으면 default로 Schedulers.computation() 스케쥴러에서 실행됩니다.
+
+이것도 마찬가지로 별도의 스레드에서 동작하기 때문에 Thread.sleep()로 프로그램이 종료하지 못하도록 설정했습니다
+
+```kotlin
+
+    println("start:\t\t ${System.currentTimeMillis()}")
+    Observable.timer(1000, TimeUnit.MILLISECONDS)
+        .subscribe {data ->
+            println("subscribe:\t ${System.currentTimeMillis()} + data = $data") }
+    Thread.sleep(2000)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84598814-56aae300-aea8-11ea-94cc-487c3e4b5003.png)
+
+
+# range
+
+![image](https://user-images.githubusercontent.com/43161981/84598829-7215ee00-aea8-11ea-89d7-374179dc0033.png)
+
+start부터 count만큼 값을 1씩 증가하는 값을 생산하는 Observable을 만드는 operator입니다.
+
+*주의* n부터 m까지가 아니라 n부터 m만큼 입니다.
+
+```kotlin
+
+        Observable.range(2, 5)
+            .subscribe { println(it) }
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84598884-d2a52b00-aea8-11ea-866d-c3e3f4fe0120.png)
+
+
+
+# repeat
+
+![image](https://user-images.githubusercontent.com/43161981/84598976-87d7e300-aea9-11ea-98ee-559a0a33aec2.png)
+
+
+Observable을 원하는 갯수만큼 반복시켜서 데이터를 전달하는 연산자입니다.
+
+
+```kotlin
+    val observable = Observable.just("Hello", "World")
+        .doOnSubscribe { println("subscribe") }
+        .repeat(2)
+
+    observable.subscribe { println(it) }
+
+```
+
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84598944-552dea80-aea9-11ea-83e9-91d342a6bb6b.png)
+
+
+
+
+
