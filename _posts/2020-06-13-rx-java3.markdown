@@ -173,6 +173,7 @@ subscribe를 할 때 fromCallable 쪽 명령어가 실행됩니다.
 
 
 
+
 # fromIterable
 
 ![image](https://user-images.githubusercontent.com/43161981/84596607-b483fe80-ae99-11ea-9eac-2f0c5183de70.png)
@@ -198,6 +199,10 @@ fromArray와는 다르게 iterable을 implements 한 클래스를 파라미터�
 ![image](https://user-images.githubusercontent.com/43161981/84596699-370cbe00-ae9a-11ea-9450-9391352b735d.png)
 
 
+
+
+
+
 # interval
 
 interval(long initialDelay, long period, TimeUnit unit)
@@ -212,10 +217,9 @@ interval 메소드로 생성한 Observable은 완료할 수가 없으므로 완�
 
 ```kotlin
 
-    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss.SSS")
+val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss.SSS")
 
     Observable.interval(0, 1000L, TimeUnit.MILLISECONDS)
-        .take(2)
         .subscribe {data ->
             println(LocalTime.now().format(dateTimeFormatter) + "data = $data") }
     Thread.sleep(3000L)
@@ -224,6 +228,10 @@ interval 메소드로 생성한 Observable은 완료할 수가 없으므로 완�
 ## 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84598664-6118ad00-aea7-11ea-9418-4b8c0df165e5.png)
+
+
+
+
 
 
 # timer
@@ -251,6 +259,10 @@ interval 메소드로 생성한 Observable은 완료할 수가 없으므로 완�
 ![image](https://user-images.githubusercontent.com/43161981/84598814-56aae300-aea8-11ea-94cc-487c3e4b5003.png)
 
 
+
+
+
+
 # range
 
 ![image](https://user-images.githubusercontent.com/43161981/84598829-7215ee00-aea8-11ea-89d7-374179dc0033.png)
@@ -268,6 +280,8 @@ start부터 count만큼 값을 1씩 증가하는 값을 생산하는 Observable�
 ## 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84598884-d2a52b00-aea8-11ea-866d-c3e3f4fe0120.png)
+
+
 
 
 
