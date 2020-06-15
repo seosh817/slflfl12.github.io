@@ -1,0 +1,136 @@
+---
+layout: post
+title:  "[RxJava] RxJava 정리 - (4) - 변환 연산자"
+subtitle:   "Rxjava"
+categories: devlog
+tags: rxjava
+comments: true
+---
+
+변환 연산자는 만들어진 데이터의 흐름을 변환하는 연산자 입니다.
+
+# buffer
+
+![image](https://user-images.githubusercontent.com/43161981/84653793-fe77ed80-af48-11ea-9c73-ce12bf82cb4e.png)
+
+
+buffer(int count, int skip)
+
+count는 몇개씩 모아서 배출할 건지를 정하는 변수이고
+skip은 몇개의 데이터가 모아졌을 때 전달할 건지 정하는 변수입니다.
+
+데이터를 바로 전달하지 않고 buffer의 size만큼 모일 때 까지 기다렸다가 List의 형태로 배출하는 연산자입니다.
+
+뒤로가기 키를 눌렀을 때 호출되는 메소드인 onBackPressed()에서 buffer 연산자를 이용해서 두개의 시간값을 비교해서 뒤로가기를 빠르게 눌렀을 때 종료하는 기능을 만들 수 있습니다.
+
+```kotlin
+    Observable.fromIterable(0..10)
+        .buffer(2, 1)
+        .subscribe { println(it)}
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84654707-9f1add00-af4a-11ea-914a-931030212e7a.png)
+
+
+
+
+
+# flatMap
+
+![image](https://user-images.githubusercontent.com/43161981/84654857-dbe6d400-af4a-11ea-8e28-00ec9620ef64.png)
+
+데이터가 들어오면 새로운 Observable로 만들어 주는 연산자입니다.
+
+flatMap 같은 경우에는 주로 api처리를 할 때 사용하게 되는데 Response(데이터)를 받아서 다른 api를 처리해야 할 때 사용하고, 이전 Observable의 데이터 전달 유무에 상관없이 바로 Observable이 실행되기 때문에 병렬처리를 해도 될 때 사용을 합니다.
+
+```kotlin
+    Observable.just(1, 2)
+        .flatMap {
+            Observable.just("${it} Hello", "${it} Hello")
+        }.subscribe {
+            println(it)
+        }
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84655437-e9e92480-af4b-11ea-90e8-93d2752053e5.png)
+
+
+
+
+
+
+# concatMap
+
+![image](https://user-images.githubusercontent.com/43161981/84655839-a642ea80-af4c-11ea-9069-ae568fe75249.png)
+
+flatMap과 마찬가지로 새로운 Observable로 만들어 주는 연산자입니다.
+
+flatMap과의 차이점은 concatMap으로 변환할 Observable은 이전 Observable이 끝날 때 까지 기다리므로 순차 처리를 해야할 때 사용합니다.
+
+
+
+
+
+# switchMap
+
+![image](https://user-images.githubusercontent.com/43161981/84655813-9cb98280-af4c-11ea-9130-e6f5325b745f.png)
+
+
+마찬가지로 새로운 Observable을 만들어 주는 연산자입니다.
+
+switchMap으로 변환할 Observable은 기존 Observable의 데이터 전달을 취소하게 하고 실행을 합니다.
+
+
+
+
+
+
+# map
+
+![image](https://user-images.githubusercontent.com/43161981/84659551-8adade00-af52-11ea-81ee-f97618e29360.png)
+
+map은 데이터 스트림을 다른 형태로 바꿀 때 사용하는 연산자입니다.
+
+```kotlin
+    Observable
+        .fromIterable(0..5)
+        .map { "hello: $it"}
+        .subscribe {
+            println(it)
+        }
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84659788-edcc7500-af52-11ea-95c9-43c1b342dc66.png)
+
+
+
+
+
+# scan
+
+![image](https://user-images.githubusercontent.com/43161981/84659825-fb81fa80-af52-11ea-9a13-1fcf68e99ece.png)
+
+이전 데이터와 현재 데이터를 합쳐서 전달하는 연산자입니다.
+하지만, 첫 데이터는 조합하지 않고 그대로 전달합니다.
+
+
+```kotlin
+
+    Observable.fromIterable(0..3)
+        .scan { t1: Int, t2: Int -> t1 + t2 }
+        .subscribe { println(it) }
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84661148-e27a4900-af54-11ea-9cd9-bc58d480c6d8.png)
+
+
+
