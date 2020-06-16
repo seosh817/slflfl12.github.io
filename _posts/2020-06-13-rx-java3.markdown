@@ -8,32 +8,33 @@ comments: true
 ---
 
 
+
 생성 연산자는 Observable을 생성하는 연산자들입니다.
 
-## Creating Operator
+## 목차
 
-#### [just](#just)
+* [**just**](#just)
 
-#### [create](#defer)
+*  [**create**](#defer)
 
-#### [fromArray](#fromarray)
+* [**fromArray**](#fromarray)
 
-#### [fromCallable](#fromcallable)
+* [**fromCallable**](#fromcallable)
 
-#### [fromIterable](#fromiterable)
+* [**fromIterable**](#fromiterable)
 
-#### [interval](#interval)
+* [**interval**](#interval)
 
-#### [timer](#timer)
+* [**timer**](#timer)
 
-#### [range](#range)
+* [**range**](#range)
 
-#### [repeat](#repeat)
+* [**repeat**](#repeat)
 
-<br/><br/><br/>
+<br/>
 
 
-# just
+## just
 
 
 ![image](https://user-images.githubusercontent.com/43161981/84595811-ed6da480-ae94-11ea-93bf-2ceb7fc7fb02.png)
@@ -56,10 +57,10 @@ just 연산자는 인자로 받은 데이터들을 순서대로 통지하는 Obs
 ![image](https://user-images.githubusercontent.com/43161981/84595866-4c331e00-ae95-11ea-85ec-e1c943a63478.png)
 
 
-<br/><br/><br/>
 
 
-# craete 
+
+## craete 
 
 ![image](https://user-images.githubusercontent.com/43161981/84591399-f781aa00-ae78-11ea-8443-09b8bcc46337.png)
 
@@ -85,10 +86,10 @@ emitter를 지정해서 함수 내부에서 onNext(), onError(), onComplete() �
 ![image](https://user-images.githubusercontent.com/43161981/84591536-28161380-ae7a-11ea-8bd7-85499b0ad53d.png)
 
 
-<br/><br/><br/>
+<br/>
 
 
-# defer 
+## defer 
 
 ![image](https://user-images.githubusercontent.com/43161981/84594411-feb2b300-ae8c-11ea-8160-736c656112fd.png)
 
@@ -136,7 +137,7 @@ defer로 생성한 Observable은 옵저버가 구독하기 전까지는 Observab
 ![image](https://user-images.githubusercontent.com/43161981/84595649-02960380-ae94-11ea-9a2a-cc607d847553.png)
 
 
-<br/><br/><br/>
+<br/>
 
 
 # fromArray
@@ -161,10 +162,10 @@ array를 받아서 Observable을 만듭니다.
 
 
 
-<br/><br/><br/>
+<br/>
 
 
-# fromCallable
+## fromCallable
 
 ![image](https://user-images.githubusercontent.com/43161981/84595948-cb285680-ae95-11ea-8685-ad377c910b47.png)
 
@@ -197,9 +198,9 @@ subscribe를 할 때 fromCallable 쪽 명령어가 실행됩니다.
 
 
 
-<br/><br/><br/>
+<br/>
 
-# fromIterable
+## fromIterable
 
 ![image](https://user-images.githubusercontent.com/43161981/84596607-b483fe80-ae99-11ea-9eac-2f0c5183de70.png)
 
@@ -226,9 +227,9 @@ fromArray와는 다르게 iterable을 implements 한 클래스를 파라미터�
 
 
 
-<br/><br/><br/>
+<br/>
 
-# interval
+## interval
 
 interval(long initialDelay, long period, TimeUnit unit)
 
@@ -257,9 +258,9 @@ val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss
 
 
 
-<br/><br/><br/>
+<br/>
 
-# timer
+## timer
 
 ![image](https://user-images.githubusercontent.com/43161981/84598692-860d2000-aea7-11ea-9eef-1312cb06c815.png)
 
@@ -286,9 +287,9 @@ val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm:ss
 
 
 
-<br/><br/><br/>
+<br/>
 
-# range
+## range
 
 ![image](https://user-images.githubusercontent.com/43161981/84598829-7215ee00-aea8-11ea-89d7-374179dc0033.png)
 
@@ -308,9 +309,9 @@ start부터 count만큼 값을 1씩 증가하는 값을 생산하는 Observable�
 
 
 
-<br/><br/><br/>
+<br/>
 
-# repeat
+## repeat
 
 ![image](https://user-images.githubusercontent.com/43161981/84598976-87d7e300-aea9-11ea-98ee-559a0a33aec2.png)
 
