@@ -20,13 +20,13 @@ debounce 같은 경우에는 자동검색을 만들때에 사용을 할 수 있�
 
 ```kotlin
 
-    //첫번째
+    //첫번째 debounce
     Observable.interval(250L, TimeUnit.MILLISECONDS)
         .debounce(200L, TimeUnit.MILLISECONDS)
         .subscribe(::println)
 
 
-    //두번째
+    //두번째 debounce
     Observable.interval(250L, TimeUnit.MILLISECONDS)
         .debounce(300L, TimeUnit.MILLISECONDS)
         .subscribe(::println)
@@ -99,6 +99,7 @@ filter는 데이터가 조건에 맞는지 판정해 결과가 true인 것만 �
 
 ```kotlin
 
+    //filter
     Observable.just(1, 1, 2, 1, 2, 3)
         .filter { it % 2 == 1 }
         .subscribe { println(it) }
@@ -116,6 +117,7 @@ ofType은 특정 타입(클래스)만 전달하는 연산자 입니다.
 
 ```kotlin
 
+    //ofType
     Observable.just(1, "Hello", true, 2f)
         .ofType(String::class.java)
         .subscribe(::println)
@@ -128,10 +130,16 @@ ofType은 특정 타입(클래스)만 전달하는 연산자 입니다.
 
 # ignoreElements
 
+모든 데이터를 무시하고 Completable을 리턴하는 연산자입니다.
+
+사용 예시는 a, b, c, d라는 함수를 사용을 하였다고 가정을 하였을 때 이 Observable이 성공을 하였거나 error 등으로 종료 될 때 단지 알림을 받고 싶을 때 유용합니다.
+
 ![image](https://user-images.githubusercontent.com/43161981/84780378-77964400-b020-11ea-8291-5b39b13eacdf.png)
 
 
 ```kotlin
+        
+        //ignoreElements
         Observable.just(1, 1, 2, 1, 2, 3)
             .ignoreElements()
             .subscribe { println("complete") }
@@ -201,9 +209,12 @@ skip은 맨 앞에 n개의 데이터를 건너 뛰고 싶을때 사용하는 연
 
 
 ```kotlin
+
+    //skip
     Observable.just(1, 1, 2, 1, 2, 3)
         .skip(2)
         .subscribe { println(it) }
+
 ```
 
 ## 실행결과
@@ -218,6 +229,7 @@ skip은 맨 앞에 n개의 데이터를 건너 뛰고 싶을때 사용하는 연
 
 ```kotlin
 
+    //skipLast
     Observable.just(1, 1, 2, 1, 2, 3)
         .skipLast(2)
         .subscribe { println(it) }
