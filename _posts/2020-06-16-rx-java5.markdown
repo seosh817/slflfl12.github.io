@@ -1,0 +1,251 @@
+---
+layout: post
+title:  "[RxJava] RxJava 정리 - (5) - 분류 연산자"
+subtitle:   "Rxjava"
+categories: devlog
+tags: rxjava
+comments: true
+---
+
+분류 연산자는 통지된 데이터를 Filtering 해주는 연산자입니다.
+
+# debounce
+
+![image](https://user-images.githubusercontent.com/43161981/84771933-2896e180-b015-11ea-8776-dda389e2b6b6.png)
+
+
+debounce는 데이터가 생성된 이후, 일정시간동안 다른 데이터가 생성이 되지 않는다면 데이터를 전달하는 연산자 입니다.
+
+debounce 같은 경우에는 자동검색을 만들때에 사용을 할 수 있습니다.
+
+```kotlin
+
+    //첫번째
+    Observable.interval(250L, TimeUnit.MILLISECONDS)
+        .debounce(200L, TimeUnit.MILLISECONDS)
+        .subscribe(::println)
+
+
+    //두번째
+    Observable.interval(250L, TimeUnit.MILLISECONDS)
+        .debounce(300L, TimeUnit.MILLISECONDS)
+        .subscribe(::println)
+
+```
+
+
+## 첫번째 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84772562-123d5580-b016-11ea-851a-d7bc6f4833fa.png)
+
+## 두번째 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84772615-2bde9d00-b016-11ea-8341-85d395b8c1df.png)
+
+
+
+
+
+
+# distinct
+
+![image](https://user-images.githubusercontent.com/43161981/84773645-ab20a080-b017-11ea-8afd-7c809971ffce.png)
+
+distinct는 이전에 전달한 데이터는 전달하지 않게 해주는 연산자 입니다.
+
+```kotlin
+
+    //distinct
+    Observable.just(1, 1, 2, 1, 2, 3)
+        .distinct()
+        .subscribe(::println)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84773743-d3a89a80-b017-11ea-914a-8bec4046be18.png)
+
+
+# distinctUntilChanged
+
+![image](https://user-images.githubusercontent.com/43161981/84773891-06eb2980-b018-11ea-8931-7f96a4b97bbe.png)
+
+distinctUntilChanged는 중복이 연속으로 일어나는 것만 제한해주는 연산자입니다.
+
+
+```kotlin
+
+    //distinctUntilChanged
+    Observable.just(1, 2, 2, 3, 1, 1, 1, 2)
+        .distinctUntilChanged()
+        .subscribe { println(it) }
+
+```
+
+
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84777600-c04bfe00-b01c-11ea-950c-0c931a2f6db7.png)
+
+
+
+# filter
+
+![image](https://user-images.githubusercontent.com/43161981/84777635-cc37c000-b01c-11ea-827a-854e4c2515af.png)
+
+filter는 데이터가 조건에 맞는지 판정해 결과가 true인 것만 통지하는 연산자입니다.
+
+```kotlin
+
+    Observable.just(1, 1, 2, 1, 2, 3)
+        .filter { it % 2 == 1 }
+        .subscribe { println(it) }
+
+```
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84777810-0b661100-b01d-11ea-92dd-e8c4689cbf4b.png)
+
+# ofType
+
+![image](https://user-images.githubusercontent.com/43161981/84778052-613ab900-b01d-11ea-82a2-1d7286d5c504.png)
+
+ofType은 특정 타입(클래스)만 전달하는 연산자 입니다.
+
+```kotlin
+
+    Observable.just(1, "Hello", true, 2f)
+        .ofType(String::class.java)
+        .subscribe(::println)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84778294-c42c5000-b01d-11ea-9076-0ebe441f827f.png)
+
+# ignoreElements
+
+![image](https://user-images.githubusercontent.com/43161981/84780378-77964400-b020-11ea-8291-5b39b13eacdf.png)
+
+
+```kotlin
+        Observable.just(1, 1, 2, 1, 2, 3)
+            .ignoreElements()
+            .subscribe { println("complete") }
+```
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84780484-9a285d00-b020-11ea-9586-22466d864b90.png)
+
+
+# throttleFirst
+
+![image](https://user-images.githubusercontent.com/43161981/84780844-0b681000-b021-11ea-8ece-340d1cb582e0.png)
+
+throttleFirst는 일정시간 들어온 데이터 중 첫번째 데이터만 전달해주는 연산자입니다.
+
+throttle을 이용해서 다중 클릭 이벤트들을 방지할 수 있습니다.
+
+실행결과를 보면 0.1초마다 데이터가 들어오는데 0.25초 동안 들어온 데이터 중에 첫번째 데이터만 전달하므로 첫번째 데이터가 들어온 이후 들어온 데이터인 1, 2의 데이터는 무시하고 0의 데이터만 들어온 것을 알 수 있고 그다음에도 마찬가지로 0.25초 이후 첫 데이터인 3만 찍힌 것을 알 수 있습니다. 
+
+```kotlin
+
+    //throttleFirst
+    println(System.currentTimeMillis())
+    Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+        .throttleFirst(250, TimeUnit.MILLISECONDS)
+        .subscribe {
+            println(System.currentTimeMillis())
+            println(it)
+        }
+    Thread.sleep(1000)
+
+```
+
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84789394-26d81880-b02b-11ea-967e-473ba127dffe.png)
+
+# throttleLast
+
+throttleLast는 일정시간 들어온 데이터 중 마지막 데이터만 전달해주는 연산자입니다.
+
+```kotlin
+
+    //throttleLast
+    println(System.currentTimeMillis())
+    Observable.interval(0, 100, TimeUnit.MILLISECONDS) //initialDelay 시작부터 시작
+        .throttleLast(250, TimeUnit.MILLISECONDS)
+        .subscribe {
+            println(System.currentTimeMillis())
+            println(it)
+        }
+    Thread.sleep(1000)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84789035-c5b04500-b02a-11ea-8cb6-1050e37fc7ef.png)
+
+
+# skip
+
+![image](https://user-images.githubusercontent.com/43161981/84789835-9ea64300-b02b-11ea-893f-802959cdac5f.png)
+
+skip은 맨 앞에 n개의 데이터를 건너 뛰고 싶을때 사용하는 연산자 입니다.
+
+
+```kotlin
+    Observable.just(1, 1, 2, 1, 2, 3)
+        .skip(2)
+        .subscribe { println(it) }
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84790425-4d4a8380-b02c-11ea-9000-c03f94bea926.png)
+
+
+
+# skipLast
+
+![image](https://user-images.githubusercontent.com/43161981/84789850-a239ca00-b02b-11ea-8b62-87cda89174bb.png)
+
+```kotlin
+
+    Observable.just(1, 1, 2, 1, 2, 3)
+        .skipLast(2)
+        .subscribe { println(it) }
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84790493-605d5380-b02c-11ea-9685-8789059ba952.png)
+
+
+# take
+
+take는 n개의 데이터만 전달하는 연산자입니다.
+
+
+![image](https://user-images.githubusercontent.com/43161981/84790615-8125a900-b02c-11ea-90fd-a5fa6f41e5fa.png)
+
+```kotlin
+
+    //take
+    Observable.just(1, 1, 2, 1, 2, 3)
+        .take(2)
+        .subscribe { println(it)}
+
+```
+
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84790587-7834d780-b02c-11ea-8034-d1cffb334f09.png)
