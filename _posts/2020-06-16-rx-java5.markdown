@@ -9,6 +9,33 @@ comments: true
 
 분류 연산자는 통지된 데이터를 Filtering 해주는 연산자입니다.
 
+
+## 목차
+
+* [**debounce**](#debounce)
+
+*  [**distinct**](#distinct)
+
+* [**distinctUntilChanged**](#distinctuntilchanged)
+
+* [**filter**](#filter)
+
+* [**ofType**](#oftype)
+
+* [**ignoreElements**](#ignoreelements)
+
+* [**throttleFirst**](#throttlefirst)
+
+* [**throttleLast**](#throttlelast)
+
+* [**skip**](#skip)
+
+* [**skipLast**](#skiplast)
+
+* [**take**](#take)
+
+<br/><br/><br/>
+
 # debounce
 
 ![image](https://user-images.githubusercontent.com/43161981/84771933-2896e180-b015-11ea-8776-dda389e2b6b6.png)
@@ -34,18 +61,18 @@ debounce 같은 경우에는 자동검색을 만들때에 사용을 할 수 있�
 ```
 
 
-## 첫번째 실행결과
+### 첫번째 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84772562-123d5580-b016-11ea-851a-d7bc6f4833fa.png)
 
-## 두번째 실행결과
+### 두번째 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84772615-2bde9d00-b016-11ea-8341-85d395b8c1df.png)
 
 
 
 
-
+<br/><br/><br/>
 
 # distinct
 
@@ -62,10 +89,11 @@ distinct는 이전에 전달한 데이터는 전달하지 않게 해주는 연�
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84773743-d3a89a80-b017-11ea-914a-8bec4046be18.png)
 
+<br/><br/><br/>
 
 # distinctUntilChanged
 
@@ -85,11 +113,11 @@ distinctUntilChanged는 중복이 연속으로 일어나는 것만 제한해주�
 
 
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84777600-c04bfe00-b01c-11ea-950c-0c931a2f6db7.png)
 
-
+<br/><br/><br/>
 
 # filter
 
@@ -105,9 +133,11 @@ filter는 데이터가 조건에 맞는지 판정해 결과가 true인 것만 �
         .subscribe { println(it) }
 
 ```
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84777810-0b661100-b01d-11ea-92dd-e8c4689cbf4b.png)
+
+<br/><br/><br/>
 
 # ofType
 
@@ -124,13 +154,11 @@ ofType은 특정 타입(클래스)만 전달하는 연산자 입니다.
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84778294-c42c5000-b01d-11ea-9076-0ebe441f827f.png)
 
-
-
-
+<br/><br/><br/>
 
 # ignoreElements
 
@@ -148,10 +176,11 @@ ofType은 특정 타입(클래스)만 전달하는 연산자 입니다.
             .ignoreElements()
             .subscribe { println("complete") }
 ```
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84780484-9a285d00-b020-11ea-9586-22466d864b90.png)
 
+<br/><br/><br/>
 
 # throttleFirst
 
@@ -178,9 +207,11 @@ throttle을 이용해서 다중 클릭 이벤트들을 방지할 수 있습니�
 ```
 
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84789394-26d81880-b02b-11ea-967e-473ba127dffe.png)
+
+<br/><br/><br/>
 
 # throttleLast
 
@@ -200,10 +231,11 @@ throttleLast는 일정시간 들어온 데이터 중 마지막 데이터만 전�
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84789035-c5b04500-b02a-11ea-8cb6-1050e37fc7ef.png)
 
+<br/><br/><br/>
 
 # skip
 
@@ -221,11 +253,11 @@ skip은 맨 앞에 n개의 데이터를 건너 뛰고 싶을때 사용하는 연
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84790425-4d4a8380-b02c-11ea-9000-c03f94bea926.png)
 
-
+<br/><br/><br/>
 
 # skipLast
 
@@ -240,10 +272,11 @@ skip은 맨 앞에 n개의 데이터를 건너 뛰고 싶을때 사용하는 연
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84790493-605d5380-b02c-11ea-9685-8789059ba952.png)
 
+<br/><br/><br/>
 
 # take
 
@@ -262,6 +295,6 @@ take는 n개의 데이터만 전달하는 연산자입니다.
 ```
 
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84790587-7834d780-b02c-11ea-8034-d1cffb334f09.png)
