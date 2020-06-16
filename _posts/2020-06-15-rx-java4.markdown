@@ -45,18 +45,27 @@ skip은 몇개의 데이터가 모아졌을 때 전달할 건지 정하는 변�
 
 flatMap 같은 경우에는 주로 api처리를 할 때 사용하게 되는데 Response(데이터)를 받아서 다른 api를 처리해야 할 때 사용하고, 이전 Observable의 데이터 전달 유무에 상관없이 바로 Observable이 실행되기 때문에 병렬처리를 해도 될 때 사용을 합니다.
 
+순서가 보장되어야 할 때 주로 사용합니다.
+
 ```kotlin
-    Observable.just(1, 2)
-        .flatMap {
-            Observable.just("${it} Hello", "${it} Hello")
-        }.subscribe {
-            println(it)
-        }
+    Observable.fromIterable(0..2)
+        .flatMap({
+            Observable.interval(100L, TimeUnit.MILLISECONDS)
+                .take(3)
+                .map(Long::toInt)
+                .map {
+                    list[it]
+                }
+        },{value, newData-> // Bifunction()
+            "${Thread.currentThread().getName()} value :$value, newData: $newData"
+            }).subscribe(::println)
+
+    Thread.sleep(1200)
 ```
 
 ## 실행결과
 
-![image](https://user-images.githubusercontent.com/43161981/84655437-e9e92480-af4b-11ea-90e8-93d2752053e5.png)
+![image](https://user-images.githubusercontent.com/43161981/84748690-ef9a4500-aff3-11ea-886d-a2e1f4fe339e.png)
 
 
 
@@ -72,6 +81,24 @@ flatMap과 마찬가지로 새로운 Observable로 만들어 주는 연산자입
 flatMap과의 차이점은 concatMap으로 변환할 Observable은 이전 Observable이 끝날 때 까지 기다리므로 순차 처리를 해야할 때 사용합니다.
 
 
+```kotlin
+
+    Observable.fromIterable(0..2)
+        .concatMap {
+            Observable.interval(100L, TimeUnit.MILLISECONDS)
+            .take(3)
+                .map(Long::toInt)
+                .map {
+                    "${Thread.currentThread().getName()} value : $it, newData: ${list[it]}"
+                }
+
+        }.subscribe(::println)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84748511-b530a800-aff3-11ea-9b04-5daa7f8d91a1.png)
 
 
 
