@@ -266,6 +266,24 @@ public interface CompletableObserver {
 
 ## Subejct
 
+Rxjava의 Observable은 기본적으로 **차가운 Observbale** 입니다.
+
+**차가운 Observable**이란 구독자가 구독한 시점부터 데이터를 발행하는 Observable입니다.
+
+**뜨거운 Observable**이란 구독자의 존재 여부와 관계 없이 데이터를 발행하는 Observable입니다. 따라서 일정 시간이 지난 이후 구독을 한다면 중간 부분부터 구독을 하게 됩니다. 구독자의 경우 모든 데이터를 수신하는 것을 보장하고 있지 않기 때문에 데이터를 발행할 때 배압을 고려해야 합니다.
+
+Cold Observable을 구독하는 모든 옵저버들은 자신만을 위해 독립적으로 실행하는 Observable을 가지게 됩니다. 하지만 Hot Observable을 구독하는 옵저버들은 단일의 Observable을 구독하게 되는 형태가 됩니다.
+
+**Cold Observable**을 **Unicast하다**. **Hot Observable**을 **MultiCast하다** 라고 합니다.
+
+
+차가운 Observable을 뜨거운 Observable로 만들려면 publish()나 share()같은 연산자를 사용할 수 있지만 Subject를 이용하는 것도 편리합니다.
+
+
+
+
+**Subject의 특징**
+
 Observable과 Observer의 성격을 둘 다 가지고 있는 클래스 입니다.
 
 Observable이 가지고 있는 subscribe와 여러 operator를 사용할 수 있습니다.
@@ -275,27 +293,113 @@ Observer가 가지고 있는 onNext, onError, onComplete를 사용할 수 있습
 subscribe를 했을 때 데이터를 넘겨주는 방식에 따라 Publish, Behavior, Replay, Async로 나누어져 있습니다.
 
 
-### PublishSubject
+# PublishSubject
 
-→구독한 시점부터 데이터를 새로 받아오는 Subject
+![image](https://user-images.githubusercontent.com/43161981/84801293-f21f8d80-b039-11ea-923b-4d6908208fdb.png)
 
-subscribe 하면 Observer 여러개
 
-### BehaviorSubject
+구독한 시점부터 데이터를 새로 받아오는 Subject 입니다.
 
--> 구독하면 subscribe()한 시점에서의 마지막데이터까지 받아온다.
+새로 구독하는 Observer는 이전의 데이터를 받지 못합니다.
 
-★생산하는 곳이 여러곳이 있을 경우 이걸 사용(ex. RxBus)
+```kotlin
 
-### ReplaySubject
+    //publishSubject
+    val publishSubject = PublishSubject.create<Int>()
+    publishSubject.subscribe { println("1번째 Observer -> $it") }
+    publishSubject.onNext(1)
+    publishSubject.subscribe { println("2번째 Obsevrer -> $it") }
+    publishSubject.onNext(2)
+    publishSubject.onNext(3)
+    publishSubject.subscribe { println("3번째 Observer -> $it") }
+    publishSubject.onNext(4)
 
-subscribe()하면 지금까지 발행된 데이터를 전부 받아옴
+```
 
-### AsyncSubject
+## 실행결과
 
-Complete()가 되면 가장 마지막 데이터를 받게 됨
+![image](https://user-images.githubusercontent.com/43161981/84801134-c1d7ef00-b039-11ea-9986-b2a1cc634a69.png)
 
-## 스케쥴러
+
+# BehaviorSubject
+
+![image](https://user-images.githubusercontent.com/43161981/84801357-06fc2100-b03a-11ea-9121-defc9d2e00c2.png)
+
+
+BehaviorSubject는 구독하면 subscribe()한 시점에서의 마지막데이터까지 받아옵니다.
+
+생산하는 곳이 여러곳이 있을 경우 이걸 사용합니다.
+
+BehaviorSubject는 구독직전의 첫번째 데이터를 받아올 수 있으므로 RxBus를 사용해야 할 때 사용하기에 적합합니다.
+
+```kotlin
+
+    //behaviorSubject
+    val behaviorSubject = BehaviorSubject.create<Int>()
+    behaviorSubject.subscribe { println("1번째 Observer -> $it") }
+    behaviorSubject.onNext(1)
+    behaviorSubject.subscribe { println("2번째 Observer -> $it") }
+    behaviorSubject.onNext(2)
+    behaviorSubject.onNext(3)
+    behaviorSubject.subscribe { println("3번째 Observer -> $it") }
+    behaviorSubject.onNext(4)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84801825-9f92a100-b03a-11ea-82b3-8aa1a1f43315.png)
+
+
+# ReplaySubject
+
+![image](https://user-images.githubusercontent.com/43161981/84801995-e2547900-b03a-11ea-8833-0ddf673b399e.png)
+
+
+ReplaySubject는 스트림의 중간에 구독을 해도 지금까지 발행된 데이터를 전부 받아올 수 있습니다.
+
+```kotlin
+
+    //replaySubject
+    val replaySubject = ReplaySubject.create<Int>()
+    replaySubject.subscribe { println("1번째 Observer -> $it") }
+    replaySubject.onNext(1)
+    replaySubject.subscribe { println("2번째 Observer -> $it") }
+    replaySubject.onNext(2)
+    replaySubject.onNext(3)
+    replaySubject.subscribe { println("3번째 Observer -> $it") }
+    replaySubject.onNext(4)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84802193-32334000-b03b-11ea-9921-6996bbf6045f.png)
+
+# AsyncSubject
+
+Complete()가 되면 가장 마지막 데이터를 받게 됩니다.
+
+```kotlin
+
+    //asyncSubject
+    val asyncSubject = AsyncSubject.create<Int>()
+    asyncSubject.subscribe { println("1번째 Observer -> $it") }
+    asyncSubject.onNext(1)
+    asyncSubject.subscribe { println("2번째 Observer -> $it") }
+    asyncSubject.onNext(2)
+    asyncSubject.onNext(3)
+    asyncSubject.subscribe { println("3번째 Observer -> $it") }
+    asyncSubject.onNext(4)
+    asyncSubject.onComplete()
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84802380-7a526280-b03b-11ea-97ed-41845cb388cb.png)
+
+
+# 스케쥴러
 
 Schedulers.computation() - 이벤트 룹에서 간단한 연산이나 콜백 처리를 위해 사용됩니다. RxComputationThreadPool라는 별도의 스레드 풀에서 돌아갑니다. 최대 갯수 개의 스레드 풀이 순환하면서 실행됩니다.
 
