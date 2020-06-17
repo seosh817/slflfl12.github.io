@@ -7,3 +7,142 @@ tags: rxjava
 comments: true
 ---
 
+조합 연산자는 
+
+## 목차
+
+* [**combineLatest**](#combinelatest)
+
+*  [**merge**](#merge)
+
+* [**startWith**](#startwith)
+
+* [**zip**](#zip)
+
+* [**ofType**](#oftype)
+
+<br/><br/><br/>
+
+# combineLatest
+
+![image](https://user-images.githubusercontent.com/43161981/84876241-f98a7980-b0c1-11ea-80b4-a60feb43b812.png)
+
+
+combineLatest는 두개의 Observable에서 각각 데이터가 생성될 때 데이터를 조합해서 전달하는 연산자 입니다.
+
+첫 데이터는 두개의 Observable에서 모두 데이터가 생성됐을 때 전달이 되고, 그 이후에는 각각의 Observable에서 데이터가 생산 될 때 데이터를 조합해서 전달합니다.
+
+
+```kotlin
+
+    //combineLatest
+    val observable3 = Observable.interval(1000L, TimeUnit.MILLISECONDS)
+    val observable4 = Observable.interval(750L, TimeUnit.MILLISECONDS)
+
+    val combineObservable = Observable.combineLatest<Long, Long, String> (
+        observable3,
+        observable4,
+        BiFunction<Long, Long, String> { t1, t2 ->
+            "$t1 $t2"
+        }
+    )
+    combineObservable.subscribe {
+        println(System.currentTimeMillis())
+        println(it)
+    }
+    Thread.sleep(3000)
+
+```
+
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84876799-9b11cb00-b0c2-11ea-8d7e-b2a03b124b8b.png)
+
+<br/><br/><br/>
+
+# merge
+
+![image](https://user-images.githubusercontent.com/43161981/84876261-fe4f2d80-b0c1-11ea-94d0-9d385a960749.png)
+
+
+merge는 두개의 Observable을 합쳐서 하나의 Observable로 만들 수 있는 연산자입니다.
+
+
+
+```kotlin
+
+    //merge
+    val observable5 = Observable.interval(0, 1000L, TimeUnit.MILLISECONDS).map {"Observable 1 -> $it"}
+    val observable6 = Observable.interval(0, 500L, TimeUnit.MILLISECONDS).map {"Observable 2 -> $it"}
+
+    val mergeObservable = Observable.merge(observable5, observable6)
+
+    mergeObservable.subscribe() {
+        println(System.currentTimeMillis())
+        println(it)
+    }
+    Thread.sleep(3000)
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84877134-09568d80-b0c3-11ea-914e-8fec1e037bb5.png)
+
+
+<br/><br/><br/>
+
+# startWith
+
+![image](https://user-images.githubusercontent.com/43161981/84876290-05763b80-b0c2-11ea-8754-3396621803d5.png)
+
+Observable에 첫번째 데이터를 추가하는 연산자입니다.
+
+
+```kotlin
+
+    //startWith
+    Observable.just(1,2,3,4,5)
+        .startWith(100)
+        .subscribe { println(it)}
+
+
+
+```
+
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84877532-97cb0f00-b0c3-11ea-8b52-63670efe2217.png)
+
+
+<br/><br/><br/>
+
+# zip
+
+![image](https://user-images.githubusercontent.com/43161981/84876316-0ad38600-b0c2-11ea-9593-26809f833914.png)
+
+zip은 각각의 Observable 데이터의 순서에 맞춰서 조합하는 연산자입니다.
+
+
+```kotlin
+
+    //zip
+    val observable7 = Observable.just(1, 2, 3, 4, 5,6,7)
+    val observable8 = Observable.just("a", "b", "c", "d", "e")
+
+    val zipObservable = Observable.zip(
+        observable7,
+        observable8,
+        BiFunction<Int, String, String> { t1, t2 ->
+            "$t1 $t2"
+        }
+    )
+    zipObservable.subscribe { println(it)}
+
+```
+
+## 실행결과
+
+![image](https://user-images.githubusercontent.com/43161981/84878978-926ec400-b0c5-11ea-8182-597c303b0a8d.png)
