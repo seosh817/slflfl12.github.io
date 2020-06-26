@@ -1,4 +1,4 @@
-User-agent: *
-Allow: /
-
-Sitemap: http://isme2n.github.io/sitemap.xml
+    
+ User-agent: *
+ Allow: /
+ Sitemap: {{ '/sitemap.xml' | relative_url | prepend: site.url }}
