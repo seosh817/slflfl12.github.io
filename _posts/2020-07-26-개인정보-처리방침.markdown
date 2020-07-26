@@ -2,7 +2,7 @@
 layout: post
 title:  "[Android] 앱 배포용 개인정보 처리 방침"
 subtitle:   "Android"
-categories: android
+categories: devlog
 tags: android
 comments: true
 ---
