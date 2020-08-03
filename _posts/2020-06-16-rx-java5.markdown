@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 정리 - (5) - 분류 연산자"
+title:  "[RxJava] RxJava 정리 - (5) - 분류 연산자(debounce/throttle/distinct/...)"
 subtitle:   "Rxjava"
 categories: devlog
 tags: rxjava

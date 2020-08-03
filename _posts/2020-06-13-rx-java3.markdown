@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 정리 - (3) - 생성 연산자"
+title:  "[RxJava] RxJava 정리 - (3) - 생성 연산자(just/defer/fromArray/fromCallable/fromIterable/interval/timer/range/repeat)"
 subtitle:   "Rxjava"
 categories: devlog
 tags: rxjava

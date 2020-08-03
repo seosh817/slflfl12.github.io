@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "[RxJava] RxJava 정리 - (4) - 변환 연산자"
+title:  "[RxJava] RxJava 정리 - (4) - 변환 연산자(buffer/flatMap/concatMap/switchMap/map/scan)"
 subtitle:   "Rxjava"
 categories: devlog
 tags: rxjava
@@ -23,6 +23,7 @@ comments: true
 
 * [**scan**](#scan)
 
+<br/><br/><br/>
 
 # buffer
 
@@ -44,13 +45,13 @@ skip은 몇개의 데이터가 모아졌을 때 전달할 건지 정하는 변�
         .subscribe { println(it)}
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84654707-9f1add00-af4a-11ea-914a-931030212e7a.png)
 
 
 
-
+<br/><br/><br/>
 
 # flatMap
 
@@ -78,14 +79,14 @@ flatMap 같은 경우에는 주로 api처리를 할 때 사용하게 되는데 R
     Thread.sleep(1200)
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84748690-ef9a4500-aff3-11ea-886d-a2e1f4fe339e.png)
 
 
 
 
-
+<br/><br/><br/>
 
 # concatMap
 
@@ -111,11 +112,12 @@ flatMap과의 차이점은 concatMap으로 변환할 Observable은 이전 Observ
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84748511-b530a800-aff3-11ea-9b04-5daa7f8d91a1.png)
 
 
+<br/><br/><br/>
 
 # switchMap
 
@@ -129,7 +131,7 @@ switchMap으로 변환할 Observable은 기존 Observable의 데이터 전달을
 
 
 
-
+<br/><br/><br/>
 
 # map
 
@@ -146,13 +148,13 @@ map은 데이터 스트림을 다른 형태로 바꿀 때 사용하는 연산자
         }
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84659788-edcc7500-af52-11ea-95c9-43c1b342dc66.png)
 
 
 
-
+<br/><br/><br/>
 
 # scan
 
@@ -170,7 +172,7 @@ map은 데이터 스트림을 다른 형태로 바꿀 때 사용하는 연산자
 
 ```
 
-## 실행결과
+### 실행결과
 
 ![image](https://user-images.githubusercontent.com/43161981/84661148-e27a4900-af54-11ea-9cd9-bc58d480c6d8.png)
 
