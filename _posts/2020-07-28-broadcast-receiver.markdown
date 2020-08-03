@@ -43,6 +43,7 @@ Android 8.0(API 레벨 26) 백그라운드 실행 제한의 일환으로 API 레
 **MyBroadcastReceiver.kt**
 
 ```kotlin
+
 private const val TAG = "MyBroadcastReceiver"
 
 class MyBroadcastReceiver : BroadcastReceiver() {
@@ -97,4 +98,5 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 }
+```
 
