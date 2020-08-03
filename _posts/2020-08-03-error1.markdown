@@ -1,0 +1,33 @@
+---
+layout: post
+title:  "[Android] D/skia: — Failed to create image decoder with message 'unimplemented' 오류"
+subtitle:   "Android"
+categories: devlog
+tags: android
+comments: true
+---
+
+```kotlin
+BitmapFactory.decodeResource(
+                        resources,
+                        R.drawable.ic_notifications
+                    )
+```
+
+에서 D/skia: — Failed to create image decoder with message 'unimplemented' 오류가 났다.
+
+1. 벡터 드로어블일 경우
+
+```kotlin
+(ResourcesCompat.getDrawable(resources, R.drawable.ic_launcher_background, null) as VectorDrawable).toBitmap()
+```
+
+2. 비트맵 드로어블일 경우
+
+```kotlin
+(ResourcesCompat.getDrawable(resources, R.drawable.ic_launcher_background, null) as BitmapDrawable).bitmap
+```
+
+수정하면 된다.
+
+나같은 경우는 벡터 드로어블이라서 1번으로 하니까 해결 됨
